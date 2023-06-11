@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour
 {
@@ -26,6 +28,8 @@ public class Player : MonoBehaviour
     public AudioClip bounceClip, deadClip, breakClip, winClip, _overpowerBreakClip;
 
     private int currentBrokenPlatforms, totalPlatforms;
+
+    public event Action IncreaseAction;
 
     public GameObject _overpowerBar;
     public Image _overpowerFill;
@@ -70,7 +74,7 @@ public class Player : MonoBehaviour
     {
         if (playerState == PlayerState.Play)
         {
-            if (Input.GetMouseButton(0) && _isClicked == true)
+            if (Input.GetMouseButton(0) && _isClicked)
             {
                 _rb.velocity = new Vector3(0, -_moveSpeed * Time.fixedDeltaTime, 0);
             }
@@ -82,7 +86,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void ClickCheck()
+    private void ClickCheck()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -97,16 +101,19 @@ public class Player : MonoBehaviour
     public void IncreaseScore()
     {
         currentBrokenPlatforms++;
-        if (!_isOverPowered)
-        {
-            ScoreHandler.instance.AddScore(1);
-            SoundManager.instance.PlaySoundEffect(breakClip, .5f);
-        }
-        else
+        
+        if (_isOverPowered)
         {
             ScoreHandler.instance.AddScore(2);
             SoundManager.instance.PlaySoundEffect(_overpowerBreakClip, .5f);
         }
+        else
+        {
+            ScoreHandler.instance.AddScore(1);
+            SoundManager.instance.PlaySoundEffect(breakClip, .5f);
+        }
+        
+        IncreaseAction?.Invoke();
     }
 
     void OnCollisionEnter(Collision target)
@@ -114,12 +121,14 @@ public class Player : MonoBehaviour
         if (!_isClicked)
         {
             _rb.velocity = new Vector3(0, _bounceSpeed * Time.deltaTime, 0);
+            
             if (!target.gameObject.CompareTag("Finish"))
             {
-                GameObject splash = Instantiate(splashEffect);
-                splash.transform.SetParent(target.transform);
+                GameObject splash = Instantiate(splashEffect, target.transform, true);
                 splash.transform.localEulerAngles= new Vector3(90, Random.Range(0, 359), 0);
+                
                 float randomScale = Random.Range(0.18f, 0.25f);
+                
                 splash.transform.localScale = new Vector3(randomScale, randomScale, 1);
                 splash.transform.position =
                     new Vector3(transform.position.x, transform.position.y - 0.25f, transform.position.z);
@@ -131,19 +140,19 @@ public class Player : MonoBehaviour
         {
             if (_isOverPowered)
             {
-                if (target.gameObject.tag == "GoodPlatform" || target.gameObject.tag == "BadPlatform")
+                if (target.gameObject.CompareTag("GoodPlatform") || target.gameObject.CompareTag("BadPlatform"))
                 {
                     target.transform.parent.GetComponent<PlatformController>().BreakAllPlatforms();
                 }
             }
             else
             {
-                if (target.gameObject.tag == "GoodPlatform")
+                if (target.gameObject.CompareTag("GoodPlatform"))
                 {
                     target.transform.parent.GetComponent<PlatformController>().BreakAllPlatforms();
                 }
 
-                if (target.gameObject.tag == "BadPlatform")
+                if (target.gameObject.CompareTag("BadPlatform"))
                 {
                     _rb.isKinematic = true;
                     transform.GetChild(0).gameObject.SetActive(false);
@@ -159,8 +168,7 @@ public class Player : MonoBehaviour
         {
             SoundManager.instance.PlaySoundEffect(winClip, 1f);
             playerState = PlayerState.Finish;
-            GameObject win = Instantiate(winEffect);
-            win.transform.SetParent(Camera.main.transform);
+            GameObject win = Instantiate(winEffect, Camera.main.transform, true);
             win.transform.localPosition = Vector3.up * 1.5f;
             win.transform.eulerAngles = Vector3.zero;
         }

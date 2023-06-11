@@ -18,13 +18,8 @@ public class PlatformController : MonoBehaviour
         {
             p.BreakingPlatforms();
         }
-
-        StartCoroutine(RemoveParts());
+        
+        Destroy(gameObject, 1f);
     }
 
-    IEnumerator RemoveParts()
-    {
-        yield return new WaitForSeconds(1f);
-        Destroy(gameObject);
-    }
 }

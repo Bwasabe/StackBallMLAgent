@@ -49,7 +49,6 @@ public class GameUI : MonoBehaviour
             {
                 soundButton.GetComponent<Image>().sprite = soundOnImg;
             }
-
             else if (!SoundManager.instance._soundPlay && soundButton.GetComponent<Image>().sprite != soundOffImg)
             {
                 soundButton.GetComponent<Image>().sprite = soundOffImg;
@@ -83,7 +82,7 @@ public class GameUI : MonoBehaviour
             gameOverUI.SetActive(true);
 
             gameOverScoreText.text = ScoreHandler.instance.score.ToString();
-            gameOverBestText.text = PlayerPrefs.GetInt("Highscore").ToString();
+            gameOverBestText.text = PlayerPrefs.GetInt("HighScore").ToString();
 
             if (Input.GetMouseButtonDown(0))
             {
