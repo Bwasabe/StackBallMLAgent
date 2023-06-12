@@ -55,7 +55,7 @@ public class GameUI : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(0) && !IgnoreUI() && _player.playerState == Player.PlayerState.Prepare)
+        if (Input.GetMouseButtonDown(0) && _player.playerState == Player.PlayerState.Prepare)
         {
             _player.playerState = Player.PlayerState.Play;
             firstUI.SetActive(false);
@@ -87,27 +87,10 @@ public class GameUI : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 ScoreHandler.instance.ResetScore();
+                // TODO: EndEpisode
                 SceneManager.LoadScene(0);
             }
         }
-    }
-
-    private bool IgnoreUI()
-    {
-        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
-        pointerEventData.position = Input.mousePosition;
-        List<RaycastResult> raycastResultList = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(pointerEventData, raycastResultList);
-        for (int i = 0; i < raycastResultList.Count; i++)
-        {
-            if (raycastResultList[i].gameObject.GetComponent<IgnoreUI>() != null)
-            {
-                raycastResultList.RemoveAt(i);
-                i--;
-            }
-        }
-
-        return raycastResultList.Count > 0;
     }
 
     public void LevelSliderFill(float fillAmount)

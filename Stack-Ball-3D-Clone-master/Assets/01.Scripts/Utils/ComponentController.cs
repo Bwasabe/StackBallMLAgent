@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class ComponentController : MonoBehaviour
 {
-    private DataController<Component> _dataController;
-    private void Awake()
+    private DataController<Component> _dataController = new();
+    protected virtual void Awake()
     {
         Component[] components = GetComponentsInChildren<Component>();
 

@@ -9,6 +9,14 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Transform _player;
     [SerializeField] private Transform _lastPlatform;
     private float _cameraDistance = 5f;
+
+    private void Start()
+    {
+        if (_lastPlatform == null)
+        {
+            _lastPlatform = GameObject.Find("LastPlatform(Clone)").transform;
+        }
+    }
     
     void Update()
     {

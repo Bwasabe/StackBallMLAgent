@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.MLAgents;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(ComponentController))]
 public class Player : MonoBehaviour
 {
     private Rigidbody _rb;
@@ -29,6 +31,8 @@ public class Player : MonoBehaviour
 
     private int currentBrokenPlatforms, totalPlatforms;
 
+    private ComponentController _componentController;
+
     public event Action IncreaseAction;
 
     public GameObject _overpowerBar;
@@ -37,15 +41,17 @@ public class Player : MonoBehaviour
     public GameObject winEffect;
 
 
-    void Awake()
+    private void Awake()
     {
-        _rb = GetComponent<Rigidbody>();
+        _componentController = GetComponent<ComponentController>();
         currentBrokenPlatforms = 0;
     }
 
     void Start()
     {
+        _rb =  _componentController.GetComponent<Rigidbody>();
         totalPlatforms = FindObjectsOfType<PlatformController>().Length;
+
     }
 
     void Update()

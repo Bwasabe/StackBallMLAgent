@@ -10,6 +10,8 @@ public class PlatformPartController : MonoBehaviour
     private Collider _collider;
     [SerializeField] private float _moveSpeed = 1.5f;
 
+
+
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -17,7 +19,7 @@ public class PlatformPartController : MonoBehaviour
         _collider = GetComponent<Collider>();
     }
 
-    public void BreakingPlatforms()
+    public void BreakingPlatforms(float force, float torque)
     {
         _rb.isKinematic = false;
         _collider.enabled = false; 
@@ -32,11 +34,8 @@ public class PlatformPartController : MonoBehaviour
 
         _mr.material.DOFade(0f, 0.3f);
         
-        float force = Random.Range(20, 35);
-        float torque = Random.Range(110, 180);
-
         _rb.AddForceAtPosition(direction * force, parentPositionPoint, ForceMode.Impulse); 
-        _rb.AddTorque(Vector3.left * torque);
+        _rb.AddTorque(Vector3.left * torque, ForceMode.Impulse);
         _rb.velocity = Vector3.down;
     }
 

@@ -38,10 +38,8 @@ public class LevelSpawner : MonoBehaviour
 
         PlatformSelection();
 
-        //Instead of increasing the i, I decreased it so I can instantiate them below. Platform addition is just the amount of platforms, you can change it to your liking. 0.5f is also an approach that I picked so you can change that to your liking as well.
         for (i = 0; i > -_level - _platformAddition; i -= 0.5f)
         {
-            //Select platforms related to difficulty
             if (_level <= 40)
                 _normalPlatforms = Instantiate(_selectedPlatforms[Random.Range(0, 2)]);
             if (_level > 40 && _level <= 80)
@@ -82,7 +80,7 @@ public class LevelSpawner : MonoBehaviour
             case 2:
                 for (int i = 0; i < 4; i++)
                     _selectedPlatforms[i] = _allPlatforms[i + 8];
-                break;
+                break; 
             case 3:
                 for (int i = 0; i < 4; i++)
                     _selectedPlatforms[i] = _allPlatforms[i + 12];
@@ -97,6 +95,7 @@ public class LevelSpawner : MonoBehaviour
     public void IncreaseTheLevel()
     {
         PlayerPrefs.SetInt("Level", PlayerPrefs.GetInt("Level") + 1);
+        // TODO: EndEpisode
         SceneManager.LoadScene(0);
     }
 }
