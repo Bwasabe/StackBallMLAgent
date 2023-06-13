@@ -29,9 +29,10 @@ public class PlayerAgent : Agent
     }
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKey(KeyCode.Space))
         {
             actionsOut.DiscreteActions.Array[0] = 0;
+            Debug.Log("눌림");
         }
         else
         {

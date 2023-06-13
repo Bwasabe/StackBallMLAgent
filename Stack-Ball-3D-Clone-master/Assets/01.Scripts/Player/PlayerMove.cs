@@ -1,19 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMove : PlayerComponentBase
 {
-    private Rigidbody _rb;
     [SerializeField] private float _moveSpeed = 5f;
-
-    protected override void Awake()
+    private Rigidbody _rb;
+    
+    private void Start()
     {
-        base.Awake();
-        
         _rb = PlayerAgent.ComponentController.GetComponent<Rigidbody>();
     }
-    
+
     void FixedUpdate()
     {
         BallMovement();

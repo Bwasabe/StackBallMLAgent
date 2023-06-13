@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public class PlayerCollision : PlayerComponentBase
 {
     [SerializeField] private Camera _mainCam;
-    [SerializeField] private PlatformController _platformController;
+    [SerializeField] private Platforms _platforms;
     
     [SerializeField] private GameObject _splashEffect;
     [SerializeField] private GameObject _winEffect;
@@ -27,12 +27,16 @@ public class PlayerCollision : PlayerComponentBase
     {
         base.Awake();
         PlayerAgent.EpisodeBeginAction += OnEpisodeBegin;
-        _rb = PlayerAgent.ComponentController.GetComponent<Rigidbody>();
     }
-    
+    private void Start()
+    {
+        _rb = PlayerAgent.ComponentController.GetComponent<Rigidbody>();
+        _playerOverPower = PlayerAgent.ComponentController.GetComponent<PlayerOverPower>();
+    }
+
     private void OnEpisodeBegin()
     {
-        _totalPlatforms = _platformController.transform.childCount;
+        _totalPlatforms = _platforms.transform.childCount;
     }
 
 
@@ -55,6 +59,11 @@ public class PlayerCollision : PlayerComponentBase
     
                 splash.GetComponent<SpriteRenderer>().color = GetComponent<MeshRenderer>().material.color;
             }
+            else
+            {
+                // Reset
+            }
+
         }
         else
         {
@@ -70,6 +79,9 @@ public class PlayerCollision : PlayerComponentBase
                 if(target.gameObject.CompareTag("GoodPlatform"))
                 {
                     target.transform.parent.GetComponent<PlatformController>().BreakAllPlatforms();
+                                        
+                    _currentBrokenPlatforms++;
+                    OnBreakPlatform?.Invoke(_currentBrokenPlatforms / (float)_totalPlatforms);
                 }
     
                 if(target.gameObject.CompareTag("BadPlatform"))
@@ -80,8 +92,7 @@ public class PlayerCollision : PlayerComponentBase
             }
         }
     
-        OnBreakPlatform?.Invoke(_currentBrokenPlatforms / (float)_totalPlatforms);
-        _currentBrokenPlatforms++;
+        
 
         if(target.gameObject.CompareTag("Finish"))
         {

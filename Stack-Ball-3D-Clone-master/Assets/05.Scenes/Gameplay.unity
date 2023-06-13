@@ -165,6 +165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 146837211}
   - component: {fileID: 146837212}
+  - component: {fileID: 146837213}
   m_Layer: 0
   m_Name: NextLevelBG
   m_TagString: Untagged
@@ -240,6 +241,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &146837213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146837210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccd24e43dbb60e84f8385939ed96be99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spriteRenderer: {fileID: 146837212}
+  _levelSpawner: {fileID: 1370082266}
+  _text: {fileID: 939128981}
+  _levelValue: 1
+  _playerAgent: {fileID: 498623468}
 --- !u!1 &167118400
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,6 +267,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 167118401}
+  - component: {fileID: 167118402}
   m_Layer: 0
   m_Name: LevelProgress
   m_TagString: Untagged
@@ -273,6 +292,21 @@ Transform:
   m_Father: {fileID: 1808551592}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &167118402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167118400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b250be6af0383774683c3d595fbdcd6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerAgent: {fileID: 498623468}
+  _levelProgressBar: {fileID: 999990393}
+  _levelProgressBackground: {fileID: 1317546850}
 --- !u!1 &475494791
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,7 +494,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &497401691
 RectTransform:
   m_ObjectHideFlags: 0
@@ -629,12 +663,15 @@ GameObject:
   - component: {fileID: 498623464}
   - component: {fileID: 498623466}
   - component: {fileID: 498623467}
-  - component: {fileID: 498623468}
   - component: {fileID: 498623469}
+  - component: {fileID: 498623468}
   - component: {fileID: 498623470}
   - component: {fileID: 498623472}
   - component: {fileID: 498623471}
   - component: {fileID: 498623473}
+  - component: {fileID: 498623474}
+  - component: {fileID: 498623476}
+  - component: {fileID: 498623475}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -656,7 +693,7 @@ Transform:
   m_Children:
   - {fileID: 56639728}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &498623464
 MeshFilter:
@@ -753,18 +790,7 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
-  splashEffect: {fileID: 1811373762065970017, guid: 0a05de5742d4264418255ad0caf2f85e,
-    type: 3}
-  _isClicked: 0
-  _isOverPowered: 0
-  _moveSpeed: 500
-  _bounceSpeed: 250
   _levelSpawner: {fileID: 0}
-  _overpowerBar: {fileID: 0}
-  _overpowerFill: {fileID: 0}
-  _fireEffect: {fileID: 56639727}
-  winEffect: {fileID: 421167128562123445, guid: 78b10f4e42074744ea3a4c883777e1bf,
-    type: 3}
 --- !u!96 &498623469
 TrailRenderer:
   serializedVersion: 2
@@ -912,18 +938,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 1
+    VectorObservationSize: 0
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
-      BranchSizes: 01000000
-    VectorActionSize: 01000000
+      BranchSizes: 0100000001000000
+    VectorActionSize: 0100000001000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 1
   m_BehaviorName: StackBall
   TeamId: 0
   m_UseChildSensors: 1
@@ -955,6 +981,51 @@ MonoBehaviour:
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 0
   m_EndVerticalOffset: 0
+--- !u!114 &498623474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498623462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4917f9c7a57c5de4e9f6fc31c1f328f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainCam: {fileID: 963194227}
+  _platforms: {fileID: 1439798858}
+  _splashEffect: {fileID: 1811373762065970017, guid: 0a05de5742d4264418255ad0caf2f85e,
+    type: 3}
+  _winEffect: {fileID: 421167128562123445, guid: 78b10f4e42074744ea3a4c883777e1bf,
+    type: 3}
+  _bounceSpeed: 250
+--- !u!114 &498623475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498623462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3026da9989e7e734d8a1256b9142fbf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _fireEffect: {fileID: 1160580509}
+--- !u!114 &498623476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498623462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 813993bc2f10e8c49b0734506e11e1e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveSpeed: 7
 --- !u!850595691 &627527488
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -1235,7 +1306,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
-  _player: {fileID: 498623468}
+  _scoreText: {fileID: 847826897}
+  _playerAgent: {fileID: 498623468}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1329,7 +1401,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &705507996
 MonoBehaviour:
@@ -2118,7 +2190,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.17364816, y: 0, z: 0, w: 0.9848078}
   m_LocalPosition: {x: 0, y: 2, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2127,7 +2199,7 @@ Transform:
   - {fileID: 1808551592}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 20, y: 0, z: 0}
 --- !u!114 &963194229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2358,6 +2430,12 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1160580509 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6526732582928902035, guid: 3b017c3e678ace74d8c14f1cd9bf2c4b,
+    type: 3}
+  m_PrefabInstance: {fileID: 876736410}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1163331482
 GameObject:
   m_ObjectHideFlags: 0
@@ -2693,6 +2771,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1255465313}
   - component: {fileID: 1255465314}
+  - component: {fileID: 1255465315}
   m_Layer: 0
   m_Name: CurrentLevelBG
   m_TagString: Untagged
@@ -2768,6 +2847,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1255465315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1255465309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccd24e43dbb60e84f8385939ed96be99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spriteRenderer: {fileID: 1255465314}
+  _levelSpawner: {fileID: 1370082266}
+  _text: {fileID: 2058195034}
+  _levelValue: 0
+  _playerAgent: {fileID: 498623468}
 --- !u!1 &1308514257
 GameObject:
   m_ObjectHideFlags: 0
@@ -3069,42 +3165,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e9fba01e5ee6bc4eb44d1ad20e9fd1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _allPlatforms:
-  - {fileID: 4083092216702661192, guid: 4090eb26e9a6243499e279e647626f17, type: 3}
-  - {fileID: 992441524142787588, guid: b44c72689c6c52746828431f75d73de2, type: 3}
-  - {fileID: 4539803227491765944, guid: 1674bc274f44df040966bd1fae819284, type: 3}
-  - {fileID: 8528561060963508861, guid: b638a53507c223a4b858a04f2b88a7ee, type: 3}
-  - {fileID: 225655592731744939, guid: d75157de4e152e94ebe7de9269282390, type: 3}
-  - {fileID: 5960452819303886218, guid: 75a7b640ecdea8b47b9478ae5d40ef62, type: 3}
-  - {fileID: 4548157771204349848, guid: c1d4c2c2b53e90445b35d21db01db8ef, type: 3}
-  - {fileID: 6286621851328594392, guid: 2a0ced72320b74f43bdfb9573124c98f, type: 3}
-  - {fileID: 2485192568765388156, guid: 90228dd910939c444b7850a039c6dcec, type: 3}
-  - {fileID: 7745127372838717392, guid: 5927dd5a5f5c301469062c1dbce3bc35, type: 3}
-  - {fileID: 4264818134659908630, guid: 9d427f0c0970b5d428dfcaed09468ee2, type: 3}
-  - {fileID: 3415692751773836768, guid: 0a876d26f30a5584282e9dadeb55635a, type: 3}
-  - {fileID: 6320859594895252874, guid: 23d3fdaf8929ba6469884ec590fdcc44, type: 3}
-  - {fileID: 8777489252609733739, guid: 5e6e0836b9ff3c34bb52a6099d976936, type: 3}
-  - {fileID: 2164004763277300209, guid: 0a5c53c4b322ad64989177877c01512b, type: 3}
-  - {fileID: 6920255094323088728, guid: 45850b997f66d7f4ab285a00b53bfe48, type: 3}
-  - {fileID: 1033941883887439971, guid: 99e26c94b59ea6446ab2abd5b7740396, type: 3}
-  - {fileID: 8173515656159446429, guid: cb7796d3fb1d2ec409be45da689ed427, type: 3}
-  - {fileID: 4443300921571106005, guid: f2f4592453b666041979e5c5985244af, type: 3}
-  - {fileID: 7491820912803991582, guid: 13c675376bea900468cb73697e203899, type: 3}
-  _selectedPlatforms:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   _winPrefab: {fileID: 3293644397374515874, guid: de014377afc97fb458185f5869ca0bd9,
     type: 3}
+  _rotationSpeed: 10
+  _platforms: {fileID: 1439798858}
   _level: 1
   _platformAddition: 7
-  _rotationSpeed: 10
   plateMaterial: {fileID: 2100000, guid: 08ba0d951780d1d4c927e110c9d952d2, type: 2}
   baseMaterial: {fileID: 2100000, guid: e3bd4246a16cd5c49968223f6e8f335f, type: 2}
-  currentLevelImage: {fileID: 0}
-  nextLevelImage: {fileID: 0}
-  progressBarImage: {fileID: 0}
   playerMesh: {fileID: 498623465}
 --- !u!1 &1378799813
 GameObject:
@@ -3235,6 +3303,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 180
+  _platformContainers:
+  - _platforms:
+    - {fileID: 4083092216702661192, guid: 4090eb26e9a6243499e279e647626f17, type: 3}
+    - {fileID: 992441524142787588, guid: b44c72689c6c52746828431f75d73de2, type: 3}
+    - {fileID: 4539803227491765944, guid: 1674bc274f44df040966bd1fae819284, type: 3}
+    - {fileID: 8528561060963508861, guid: b638a53507c223a4b858a04f2b88a7ee, type: 3}
+  - _platforms:
+    - {fileID: 225655592731744939, guid: d75157de4e152e94ebe7de9269282390, type: 3}
+    - {fileID: 5960452819303886218, guid: 75a7b640ecdea8b47b9478ae5d40ef62, type: 3}
+    - {fileID: 4548157771204349848, guid: c1d4c2c2b53e90445b35d21db01db8ef, type: 3}
+    - {fileID: 6286621851328594392, guid: 2a0ced72320b74f43bdfb9573124c98f, type: 3}
+  - _platforms:
+    - {fileID: 2485192568765388156, guid: 90228dd910939c444b7850a039c6dcec, type: 3}
+    - {fileID: 7745127372838717392, guid: 5927dd5a5f5c301469062c1dbce3bc35, type: 3}
+    - {fileID: 4264818134659908630, guid: 9d427f0c0970b5d428dfcaed09468ee2, type: 3}
+    - {fileID: 3415692751773836768, guid: 0a876d26f30a5584282e9dadeb55635a, type: 3}
+  - _platforms:
+    - {fileID: 6320859594895252874, guid: 23d3fdaf8929ba6469884ec590fdcc44, type: 3}
+    - {fileID: 8777489252609733739, guid: 5e6e0836b9ff3c34bb52a6099d976936, type: 3}
+    - {fileID: 2164004763277300209, guid: 0a5c53c4b322ad64989177877c01512b, type: 3}
+    - {fileID: 6920255094323088728, guid: 45850b997f66d7f4ab285a00b53bfe48, type: 3}
+  - _platforms:
+    - {fileID: 1033941883887439971, guid: 99e26c94b59ea6446ab2abd5b7740396, type: 3}
+    - {fileID: 8173515656159446429, guid: cb7796d3fb1d2ec409be45da689ed427, type: 3}
+    - {fileID: 4443300921571106005, guid: f2f4592453b666041979e5c5985244af, type: 3}
+    - {fileID: 7491820912803991582, guid: 13c675376bea900468cb73697e203899, type: 3}
 --- !u!1 &1500180457
 GameObject:
   m_ObjectHideFlags: 0
