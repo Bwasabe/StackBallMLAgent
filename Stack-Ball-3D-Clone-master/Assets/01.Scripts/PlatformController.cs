@@ -13,7 +13,6 @@ public class PlatformController : MonoBehaviour
         if (transform.parent != null)
         {
             transform.parent = null;
-            FindObjectOfType<Player>().IncreaseScore();
         }
 
         foreach (PlatformPartController p in _platforms)

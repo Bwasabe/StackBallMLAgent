@@ -15,7 +15,6 @@ public class LevelSpawner : MonoBehaviour
     [SerializeField] private float _rotationSpeed = 10f;
     private float i = 0;
     public Material plateMaterial, baseMaterial;
-    public Image currentLevelImage, nextLevelImage, progressBarImage;
     public MeshRenderer playerMesh;
 
     void Awake()
@@ -28,9 +27,9 @@ public class LevelSpawner : MonoBehaviour
         plateMaterial.color = Random.ColorHSV(0, 1, .5f, 1, 1, 1);
         baseMaterial.color = plateMaterial.color + Color.gray;
         playerMesh.material.color = plateMaterial.color;
-        currentLevelImage.color = plateMaterial.color;
-        nextLevelImage.color = plateMaterial.color;
-        progressBarImage.color = plateMaterial.color;
+        // currentLevelImage.color = plateMaterial.color;
+        // nextLevelImage.color = plateMaterial.color;
+        // progressBarImage.color = plateMaterial.color;
 
         _level = PlayerPrefs.GetInt("Level", 1);
         if (_level > 9)

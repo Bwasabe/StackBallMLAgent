@@ -4,20 +4,9 @@ using UnityEngine;
 
 public class Platforms : MonoBehaviour
 {
-    [SerializeField] private float _speed = 180f;
-    
+    [SerializeField] private float _speed = 100f;
     void Update()
     {
-        if(Input.GetKey(KeyCode.A))
-        {
-            transform.Rotate(new Vector3(0, _speed * Time.deltaTime, 0));
-            
-        }
-
-        if(Input.GetKey(KeyCode.D))
-        {
-            transform.Rotate(new Vector3(0, -_speed * Time.deltaTime, 0));
-            
-        }
+        transform.Rotate(new Vector3(0, _speed * Time.deltaTime, 0));
     }
 }

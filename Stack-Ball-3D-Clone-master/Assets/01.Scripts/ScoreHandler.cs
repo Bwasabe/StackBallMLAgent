@@ -7,47 +7,52 @@ using UnityEngine.UI;
 
 public class ScoreHandler : MonoBehaviour
 {
-    public static ScoreHandler instance;
     public int score = 0;
-    private Text _scoreText;
+    [SerializeField] private Text _scoreText;
+    [SerializeField] private PlayerAgent _playerAgent;
 
+    private PlayerCollision _playerCollision;
+    private PlayerOverPower _playerOverPower;
     void Awake()
     {
-        if(instance != null)
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        _playerAgent.EpisodeBeginAction += OnEpisodeBegin;
+    }
+    private void OnEpisodeBegin()
+    {
+        AddScore(0);
+    }
+
+
+    void Start()
+    {
+        _playerCollision = _playerAgent.ComponentController.GetComponent<PlayerCollision>();
+        _playerCollision.OnBreakPlatform += OnPlatformBreak;
+        AddScore(0);
+    }
+    
+    private void OnPlatformBreak(float overPower)
+    {
+        if (_playerOverPower.IsOverPower)
         {
-            Destroy(gameObject);
+            AddScore(2);
         }
         else
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
+            AddScore(1);
         }
-
-        SceneManager.sceneLoaded += OnSceneLoaded;
     }
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
         _scoreText = GameObject.Find("ScoreText").GetComponent<Text>();
         _scoreText.text = score.ToString();
-
     }
 
-    void Start()
-    {
 
-        AddScore(0);
-    }
-    
 
-    public void AddScore(int amount)
+    private void AddScore(int amount)
     {
         score += amount;
-        if(score > PlayerPrefs.GetInt("Highscore", 0))
-        {
-            PlayerPrefs.SetInt("Highscore", score);
-        }
-
-        _scoreText.text = score.ToString();
     }
 
     public void ResetScore()
