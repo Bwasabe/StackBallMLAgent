@@ -8,12 +8,14 @@ public class PlayerCollision : PlayerComponentBase
 {
     [SerializeField] private Camera _mainCam;
     [SerializeField] private Platforms _platforms;
-    
+
     [SerializeField] private GameObject _splashEffect;
     [SerializeField] private GameObject _winEffect;
 
     [SerializeField] private float _bounceSpeed = 250f;
-    
+
+    [SerializeField] private Stage _stage;
+
     public event Action<float> OnBreakPlatform;
 
     private int _currentBrokenPlatforms;
@@ -22,10 +24,14 @@ public class PlayerCollision : PlayerComponentBase
     private Rigidbody _rb;
 
     private PlayerOverPower _playerOverPower;
-    
+
+    private Vector3 _resetPosition;
+
     protected override void Awake()
     {
         base.Awake();
+        _resetPosition = transform.position;
+
         PlayerAgent.EpisodeBeginAction += OnEpisodeBegin;
     }
     private void Start()
@@ -37,33 +43,36 @@ public class PlayerCollision : PlayerComponentBase
     private void OnEpisodeBegin()
     {
         _totalPlatforms = _platforms.transform.childCount;
+        transform.position = _resetPosition;
+
     }
 
 
     void OnCollisionEnter(Collision target)
     {
+        if(target.gameObject.CompareTag("Finish"))
+        {
+            // Reset
+            transform.position = _resetPosition;
+            _stage.WinGame();
+
+            return;
+        }
+
         if(!PlayerAgent.IsDown)
         {
             _rb.velocity = new Vector3(0, _bounceSpeed * Time.deltaTime, 0);
-    
-            if(!target.gameObject.CompareTag("Finish"))
-            {
-                GameObject splash = Instantiate(_splashEffect, target.transform, true);
-                splash.transform.localEulerAngles = new Vector3(90, Random.Range(0, 359), 0);
-    
-                float randomScale = Random.Range(0.18f, 0.25f);
-    
-                splash.transform.localScale = new Vector3(randomScale, randomScale, 1);
-                splash.transform.position =
-                    new Vector3(transform.position.x, transform.position.y - 0.25f, transform.position.z);
-    
-                splash.GetComponent<SpriteRenderer>().color = GetComponent<MeshRenderer>().material.color;
-            }
-            else
-            {
-                // Reset
-            }
 
+            GameObject splash = Instantiate(_splashEffect, target.transform, true);
+            splash.transform.localEulerAngles = new Vector3(90, Random.Range(0, 359), 0);
+
+            float randomScale = Random.Range(0.18f, 0.25f);
+
+            splash.transform.localScale = new Vector3(randomScale, randomScale, 1);
+            splash.transform.position =
+                new Vector3(transform.position.x, transform.position.y - 0.25f, transform.position.z);
+
+            splash.GetComponent<SpriteRenderer>().color = GetComponent<MeshRenderer>().material.color;
         }
         else
         {
@@ -79,20 +88,19 @@ public class PlayerCollision : PlayerComponentBase
                 if(target.gameObject.CompareTag("GoodPlatform"))
                 {
                     target.transform.parent.GetComponent<PlatformController>().BreakAllPlatforms();
-                                        
+
                     _currentBrokenPlatforms++;
                     OnBreakPlatform?.Invoke(_currentBrokenPlatforms / (float)_totalPlatforms);
                 }
-    
+
                 if(target.gameObject.CompareTag("BadPlatform"))
                 {
-                    _rb.isKinematic = true;
                     transform.GetChild(0).gameObject.SetActive(false);
+                    PlayerAgent.EndEpisode();
                 }
             }
         }
-    
-        
+
 
         if(target.gameObject.CompareTag("Finish"))
         {
@@ -103,7 +111,7 @@ public class PlayerCollision : PlayerComponentBase
             win.transform.eulerAngles = Vector3.zero;
         }
     }
-    
+
     void OnCollisionStay(Collision target)
     {
         if(!PlayerAgent.IsDown || target.gameObject.CompareTag("Finish"))

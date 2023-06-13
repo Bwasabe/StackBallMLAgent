@@ -32,7 +32,6 @@ public class PlayerAgent : Agent
         if(Input.GetKey(KeyCode.Space))
         {
             actionsOut.DiscreteActions.Array[0] = 0;
-            Debug.Log("눌림");
         }
         else
         {

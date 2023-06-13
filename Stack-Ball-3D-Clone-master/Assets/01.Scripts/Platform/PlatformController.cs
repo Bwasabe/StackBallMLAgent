@@ -25,5 +25,4 @@ public class PlatformController : MonoBehaviour
         
         Destroy(gameObject, 1f);
     }
-
 }

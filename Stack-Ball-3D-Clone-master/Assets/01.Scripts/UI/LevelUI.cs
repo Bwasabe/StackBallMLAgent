@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class LevelUI : MonoBehaviour
+public class LevelUI : MonoBehaviour, IWinAble
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private LevelSpawner _levelSpawner;
@@ -14,7 +14,6 @@ public class LevelUI : MonoBehaviour
 
     private MeshRenderer _playerMeshRenderer;
     
-    // TODO: OnEpisodeBegin
     private void Start ()
     {
         _playerAgent.EpisodeBeginAction += OnEpisodeBegin;
@@ -25,6 +24,18 @@ public class LevelUI : MonoBehaviour
     }
     private void OnEpisodeBegin()
     {
+        _spriteRenderer.color = _playerAgent.ComponentController.GetComponent<MeshRenderer>().material.color;
+
+        _text.text = $"{(_levelSpawner.Level + _levelValue).ToString()}";
+    }
+    public void WinGame()
+    {
+        StartCoroutine(DelayCoroutine());
+    }
+
+    private IEnumerator DelayCoroutine()
+    {
+        yield return null;
         _spriteRenderer.color = _playerAgent.ComponentController.GetComponent<MeshRenderer>().material.color;
 
         _text.text = $"{(_levelSpawner.Level + _levelValue).ToString()}";

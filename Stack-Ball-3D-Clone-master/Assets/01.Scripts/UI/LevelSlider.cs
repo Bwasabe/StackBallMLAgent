@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelSlider : MonoBehaviour
+public class LevelSlider : MonoBehaviour, IWinAble
 {
     [SerializeField] private PlayerAgent _playerAgent;
     [SerializeField] private SpriteRenderer _levelProgressBar;
@@ -19,18 +19,24 @@ public class LevelSlider : MonoBehaviour
     {
         _playerColor = _playerAgent.ComponentController.GetComponent<MeshRenderer>().material.color;
 
+        _playerAgent.EpisodeBeginAction += WinGame;
+
         PlayerCollision playerCollision = _playerAgent.ComponentController.GetComponent<PlayerCollision>(); 
         
         _progressMaterial = _levelProgressBar.material;
-
-        _levelProgressBar.color = _playerColor + Color.gray;
-        _levelProgressBackground.color = _playerColor;
-
-        playerCollision .OnBreakPlatform += LevelProgressFill;
+        
+        playerCollision.OnBreakPlatform += LevelProgressFill;
     }
     
     private void LevelProgressFill(float value)
     {
         _progressMaterial.SetFloat(Progress_ID, value);
+    }
+    public void WinGame()
+    {
+        _progressMaterial.SetFloat(Progress_ID, 0f);
+        
+        _levelProgressBar.color = _playerColor + Color.gray;
+        _levelProgressBackground.color = _playerColor;
     }
 }

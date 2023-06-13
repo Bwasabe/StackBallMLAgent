@@ -5,13 +5,13 @@ using DG.Tweening;
 
 public class PlatformPartController : MonoBehaviour
 {
+    [SerializeField] private float _moveSpeed = 1.5f;
+    
     private Rigidbody _rb;
     private MeshRenderer _mr;
     private Collider _collider;
-    [SerializeField] private float _moveSpeed = 1.5f;
 
-
-
+    
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -38,13 +38,5 @@ public class PlatformPartController : MonoBehaviour
         _rb.AddTorque(Vector3.left * torque, ForceMode.Impulse);
         _rb.velocity = Vector3.down;
     }
-
-    public void RemoveAllChildPlatforms()
-    {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            transform.GetChild(i).SetParent(null);
-            i--;
-        }
-    }
+    
 }

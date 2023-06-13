@@ -4,6 +4,6 @@ using UnityEngine;
 [Serializable]
 public class PlatformContainer
 {
-    [SerializeField] private GameObject[] _platforms = new GameObject[4];
-    public GameObject[] Platforms => _platforms;
+    [SerializeField] private PlatformController[] _platforms = new PlatformController[4];
+    public PlatformController[] Platforms => _platforms;
 }

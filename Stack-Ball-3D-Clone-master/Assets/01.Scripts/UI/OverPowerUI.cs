@@ -10,7 +10,7 @@ public class OverPowerUI : MonoBehaviour
 
     private PlayerOverPower _playerOverPower;
     private Material _overPowerMat;
-    private readonly int ARC1_ID = Shader.PropertyToID("_Arc3");
+    private readonly int ARC2_ID = Shader.PropertyToID("_Arc2");
     
     private void Start()
     {
@@ -37,7 +37,7 @@ public class OverPowerUI : MonoBehaviour
         }
     
         if(gameObject.activeInHierarchy)
-            _overPowerMat.SetFloat(ARC1_ID, overPower * 360f);
+            _overPowerMat.SetFloat(ARC2_ID, 360 - overPower * 360f);
     }
 
 
