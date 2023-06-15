@@ -8,6 +8,7 @@ public class PlatformController : MonoBehaviour
     
     [SerializeField] private Vector2 _forceRandom = new Vector2(10f, 15f);
     [SerializeField] private Vector2 _torqueRandom = new Vector2(30, 270f);
+    
     public void BreakAllPlatforms()
     {
         if (transform.parent != null)

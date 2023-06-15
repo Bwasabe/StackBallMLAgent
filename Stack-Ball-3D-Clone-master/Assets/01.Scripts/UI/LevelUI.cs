@@ -24,10 +24,9 @@ public class LevelUI : MonoBehaviour, IWinAble
     }
     private void OnEpisodeBegin()
     {
-        _spriteRenderer.color = _playerAgent.ComponentController.GetComponent<MeshRenderer>().material.color;
-
-        _text.text = $"{(_levelSpawner.Level + _levelValue).ToString()}";
+        StartCoroutine(DelayCoroutine());
     }
+    
     public void WinGame()
     {
         StartCoroutine(DelayCoroutine());
@@ -36,7 +35,7 @@ public class LevelUI : MonoBehaviour, IWinAble
     private IEnumerator DelayCoroutine()
     {
         yield return null;
-        _spriteRenderer.color = _playerAgent.ComponentController.GetComponent<MeshRenderer>().material.color;
+        _spriteRenderer.color = _playerMeshRenderer.material.color;
 
         _text.text = $"{(_levelSpawner.Level + _levelValue).ToString()}";
     }

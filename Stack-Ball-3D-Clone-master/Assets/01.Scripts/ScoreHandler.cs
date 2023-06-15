@@ -21,6 +21,7 @@ public class ScoreHandler : MonoBehaviour
     
     private void OnEpisodeBegin()
     {
+        score = 0;
         AddScore(0);
     }
 

@@ -24,10 +24,11 @@ public class CameraFollow : MonoBehaviour, IWinAble
 
     private void FollowTheBall()
     {
-        if (transform.position.y > _player.transform.position.y && transform.position.y > LastPlatform.position.y + 4)
-            _camPosition = new Vector3(transform.position.x, _player.transform.position.y, transform.position.z);
+        if(LastPlatform == null)return;
+        if (transform.localPosition.y > _player.transform.localPosition.y && transform.localPosition.y > LastPlatform.localPosition.y + 4)
+            _camPosition = new Vector3(transform.localPosition.x, _player.transform.localPosition.y, transform.localPosition.z);
 
-        transform.position = new Vector3(transform.position.x, _camPosition.y, -_cameraDistance);
+        transform.localPosition = new Vector3(transform.localPosition.x, _camPosition.y, -_cameraDistance);
     }
     public void WinGame()
     {
@@ -36,10 +37,11 @@ public class CameraFollow : MonoBehaviour, IWinAble
 
     private IEnumerator DelayCoroutine()
     {
-        Destroy(LastPlatform.gameObject);
+        if(LastPlatform != null)
+            Destroy(LastPlatform.gameObject);
         yield return null;
-        transform.position = new Vector3(transform.position.x, _player.transform.position.y, transform.position.z);
-        _camPosition = transform.position;
+        transform.localPosition = new Vector3(transform.localPosition.x, _player.transform.localPosition.y, transform.localPosition.z);
+        _camPosition = transform.localPosition;
 
     }
 }

@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class PlayerCollision : PlayerComponentBase
+public class PlayerCollision : PlayerComponentBase, IWinAble
 {
     [SerializeField] private Camera _mainCam;
     [SerializeField] private Platforms _platforms;
+    [SerializeField] private LevelSpawner _levelSpawner;
 
     [SerializeField] private GameObject _splashEffect;
     [SerializeField] private GameObject _winEffect;
@@ -30,7 +31,7 @@ public class PlayerCollision : PlayerComponentBase
     protected override void Awake()
     {
         base.Awake();
-        _resetPosition = transform.position;
+        _resetPosition = transform.localPosition;
 
         PlayerAgent.EpisodeBeginAction += OnEpisodeBegin;
     }
@@ -42,9 +43,18 @@ public class PlayerCollision : PlayerComponentBase
 
     private void OnEpisodeBegin()
     {
-        _totalPlatforms = _platforms.transform.childCount;
-        transform.position = _resetPosition;
+        transform.localPosition = _resetPosition;
+        _currentBrokenPlatforms = 0;
+        
+        StartCoroutine(SetTotalPlatform());
+    }
 
+    private IEnumerator SetTotalPlatform()
+    {
+        yield return null;
+        yield return null;
+        yield return null;
+        _totalPlatforms = _platforms.transform.childCount;
     }
 
 
@@ -53,9 +63,18 @@ public class PlayerCollision : PlayerComponentBase
         if(target.gameObject.CompareTag("Finish"))
         {
             // Reset
-            transform.position = _resetPosition;
-            _stage.WinGame();
+            transform.localPosition = _resetPosition;
+            
+            GameObject win = Instantiate(_winEffect, _mainCam.transform, true);
+            win.transform.localPosition = Vector3.up * 1.5f;
+            win.transform.eulerAngles = Vector3.zero;
 
+            ParticleSystem particleSystem = win.GetComponent<ParticleSystem>(); 
+            
+            Destroy(win, particleSystem.duration);
+            _stage.WinGame();
+            
+            PlayerAgent.AddReward(_levelSpawner.Level);
             return;
         }
 
@@ -69,8 +88,8 @@ public class PlayerCollision : PlayerComponentBase
             float randomScale = Random.Range(0.18f, 0.25f);
 
             splash.transform.localScale = new Vector3(randomScale, randomScale, 1);
-            splash.transform.position =
-                new Vector3(transform.position.x, transform.position.y - 0.25f, transform.position.z);
+            splash.transform.localPosition   =
+                new Vector3(transform.localPosition .x, transform.localPosition .y - 0.25f, transform.localPosition .z);
 
             splash.GetComponent<SpriteRenderer>().color = GetComponent<MeshRenderer>().material.color;
         }
@@ -80,7 +99,15 @@ public class PlayerCollision : PlayerComponentBase
             {
                 if(target.gameObject.CompareTag("GoodPlatform") || target.gameObject.CompareTag("BadPlatform"))
                 {
-                    target.transform.parent.GetComponent<PlatformController>().BreakAllPlatforms();
+                    PlatformController platformController = target.transform.parent.GetComponent<PlatformController>();
+                    platformController.BreakAllPlatforms();
+                    
+                    
+                    _currentBrokenPlatforms = _totalPlatforms - _platforms.transform.childCount;
+                    
+                    PlayerAgent.AddReward(0.1f);
+                    OnBreakPlatform?.Invoke(_currentBrokenPlatforms / (float)_totalPlatforms);
+
                 }
             }
             else
@@ -89,26 +116,20 @@ public class PlayerCollision : PlayerComponentBase
                 {
                     target.transform.parent.GetComponent<PlatformController>().BreakAllPlatforms();
 
-                    _currentBrokenPlatforms++;
+
+                    _currentBrokenPlatforms = _totalPlatforms - _platforms.transform.childCount;
+                    PlayerAgent.AddReward(0.1f);
                     OnBreakPlatform?.Invoke(_currentBrokenPlatforms / (float)_totalPlatforms);
                 }
 
                 if(target.gameObject.CompareTag("BadPlatform"))
                 {
                     transform.GetChild(0).gameObject.SetActive(false);
+                    PlayerAgent.AddReward(-5f);
+                    
                     PlayerAgent.EndEpisode();
                 }
             }
-        }
-
-
-        if(target.gameObject.CompareTag("Finish"))
-        {
-            // TODO: Reset
-            // PlayerAgent.IncreaseScore();
-            GameObject win = Instantiate(_winEffect, _mainCam.transform, true);
-            win.transform.localPosition = Vector3.up * 1.5f;
-            win.transform.eulerAngles = Vector3.zero;
         }
     }
 
@@ -116,5 +137,10 @@ public class PlayerCollision : PlayerComponentBase
     {
         if(!PlayerAgent.IsDown || target.gameObject.CompareTag("Finish"))
             _rb.velocity = new Vector3(0, _bounceSpeed * Time.deltaTime, 0);
+    }
+    public void WinGame()
+    {
+        _currentBrokenPlatforms = 0;
+        StartCoroutine(SetTotalPlatform());
     }
 }

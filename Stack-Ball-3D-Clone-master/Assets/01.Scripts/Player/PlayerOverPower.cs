@@ -7,12 +7,31 @@ using UnityEngine;
 public class PlayerOverPower : PlayerComponentBase
 {
     [SerializeField] private GameObject _fireEffect;
+    
+    [SerializeField] private float _overPowerDecrease = .3f;
+
+    [SerializeField] private float _downIncrease = .3f;
+    [SerializeField] private float _downDecrease = .1f;
+    
     public bool IsOverPower{ get; private set; }
 
     private float _overPower;
 
+    public float OverPower => _overPower;
+
     public event Action<float> OnOverPower;
+
+    private void Start()
+    {
+        PlayerAgent.EpisodeBeginAction += OnEpisodeBeginAction;
+    }
     
+    private void OnEpisodeBeginAction()
+    {
+        _overPower = 0f;
+        OnOverPower?.Invoke(0f);
+    }
+
     private void Update()
     {
         OverPowerCheck();
@@ -22,7 +41,7 @@ public class PlayerOverPower : PlayerComponentBase
     {
         if(IsOverPower)
         {
-            _overPower -= Time.deltaTime * .3f;
+            _overPower -= Time.deltaTime * _overPowerDecrease;
             if(!_fireEffect.activeInHierarchy)
                 _fireEffect.SetActive(true);
         }
@@ -32,9 +51,9 @@ public class PlayerOverPower : PlayerComponentBase
                 _fireEffect.SetActive(false);
     
             if(PlayerAgent.IsDown)
-                _overPower += Time.deltaTime * .8f;
+                _overPower += Time.deltaTime * _downIncrease;
             else
-                _overPower -= Time.deltaTime * .5f;
+                _overPower -= Time.deltaTime * _downDecrease;
         }
         
         OnOverPower?.Invoke(_overPower);

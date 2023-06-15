@@ -1,0 +1,29 @@
+{
+    "StackBall": {
+        "checkpoints": [
+            {
+                "steps": 84960,
+                "file_path": "results\\StackBall_01\\StackBall\\StackBall-84960.onnx",
+                "reward": 60.436911291546295,
+                "creation_time": 1686806373.2293503,
+                "auxillary_file_paths": [
+                    "results\\StackBall_01\\StackBall\\StackBall-84960.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 84960,
+            "file_path": "results\\StackBall_01\\StackBall.onnx",
+            "reward": 60.436911291546295,
+            "creation_time": 1686806373.2293503,
+            "auxillary_file_paths": [
+                "results\\StackBall_01\\StackBall\\StackBall-84960.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.26.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

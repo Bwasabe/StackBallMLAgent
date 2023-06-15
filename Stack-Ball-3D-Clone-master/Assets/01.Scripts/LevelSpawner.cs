@@ -42,7 +42,9 @@ public class LevelSpawner : MonoBehaviour, IWinAble
             else
                 normalPlatform = _platforms.GetSelectedPlatform(3,4);
 
-            normalPlatform.transform.position = new Vector3(0, i, 0);
+            normalPlatform.transform.parent = _platforms.transform;
+            
+            normalPlatform.transform.localPosition = new Vector3(0, i, 0);
             normalPlatform.transform.eulerAngles = new Vector3(0, i * _rotationSpeed, 0);
 
             if (Mathf.Abs(i) >= Level * .3f && Mathf.Abs(i) <= Level * .6f) 
@@ -50,16 +52,16 @@ public class LevelSpawner : MonoBehaviour, IWinAble
                 normalPlatform.transform.eulerAngles += Vector3.up * 180;
             }
 
-            normalPlatform.transform.parent = _platforms.transform;
             
         }
         
         
-        _winPlatform = Instantiate(_winPrefab);
-        
+        _winPlatform = Instantiate(_winPrefab, _platforms.transform, true);
+
+
         _cameraFollow.LastPlatform = _winPlatform.transform;
         
-        _winPlatform.transform.position = new Vector3(0, i, 0);
+        _winPlatform.transform.localPosition = new Vector3(0, i, 0);
         
     }
 
@@ -71,7 +73,6 @@ public class LevelSpawner : MonoBehaviour, IWinAble
         StartCoroutine(DelayCoroutine());
     }
     
-    // TODO: Reset
     public void WinGame()
     {
         Level++;
