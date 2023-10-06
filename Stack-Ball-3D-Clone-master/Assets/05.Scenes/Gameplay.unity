@@ -1067,10 +1067,5 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stage
       objectReference: {fileID: 0}
-    - target: {fileID: 4984965213837898981, guid: aa088d8ba574a5c4b9c65bbeeb59574c,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 3.04
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa088d8ba574a5c4b9c65bbeeb59574c, type: 3}
